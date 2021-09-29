@@ -819,8 +819,13 @@ int nrows, ncols, permanence;
 
     if (tmp == NULL)
     {
-	error("VC_GEE_create_matrix: malloc failed %d",
-	      sizeof(struct matrix));
+    	R_gc();	// Try to increase available memory
+	    tmp = (MATRIX *) calloc (1, sizeof (struct matrix));
+		if (tmp == NULL)
+		{
+			error("VC_GEE_create_matrix: malloc failed %d",
+	    	  sizeof(struct matrix));
+	    }
     }
 
     tmp->nrows = nrows;
@@ -831,8 +836,13 @@ int nrows, ncols, permanence;
 
     if (tmp->data == NULL)
     {
-	error("VC_GEE_create_matrix: malloc failed, nrows=%d ncols=%d",
-	      nrows, ncols);
+    	R_gc();	// Try to increase available memory
+	    tmp->data = (double *) calloc (1,  nrows * ncols * sizeof (double));
+		if (tmp->data == NULL)
+		{
+			error("VC_GEE_create_matrix: malloc failed, nrows=%d ncols=%d",
+	    	  nrows, ncols);
+	    }
     }
 
     head = tmp->data;
